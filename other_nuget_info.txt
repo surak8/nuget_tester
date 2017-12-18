@@ -1,0 +1,3 @@
+API key and other examples can be found at:
+
+https://github.com/surak8/nuget_test.git
