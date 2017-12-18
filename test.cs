@@ -14,12 +14,13 @@ using System.Runtime.InteropServices;
 #endif
 [assembly:ComVisible(false)]
 
-[assembly:AssemblyVersion("1.0.1.0")]
-[assembly:AssemblyFileVersion("1.0.1.0")]
-[assembly:AssemblyInformationalVersion("1.0.1.0")]
+[assembly:AssemblyVersion(NSTest.test.VERSION)]
+[assembly:AssemblyFileVersion(NSTest.test.VERSION)]
+[assembly:AssemblyInformationalVersion(NSTest.test.VERSION)]
 
 namespace NSTest {
 	public class test {
+		public const string VERSION="1.0.2.0";
 		[STAThread]
 		public static void Main(string[] args){
 			Environment.Exit(0);
