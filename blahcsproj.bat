@@ -10,3 +10,4 @@ REM REM nuget pack  -verbosity detailed %NAME%.nuspec
  nuget pack  -verbosity detailed  test.nuspec -properties owners=janedoe,harikm,kimo,xiaop;desc="Awesome app logger utility";tags=riktest 
 REM nuget push test.1.0.2.0.nupkg -source "\\appdeploy\appdeploy\Colt Software\NUGET"  -apikey 3cf63582-b815-4cd4-82ec-4b269fbc614b 
 nuget push test.1.0.2.nupkg
+nuget pack tester.csproj -verbosity detailed -properties tags=riktest 
