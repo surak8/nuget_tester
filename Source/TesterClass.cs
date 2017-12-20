@@ -8,9 +8,72 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.IO;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace NSTester {
     
     public class TesterClass {
+        public void readPackage(string filename) {
+            XmlSerializer xs;
+            XmlReaderSettings xrs;
+            NugetPackage aPkg;
+            XmlDeserializationEvents xde;
+
+            xs = new XmlSerializer(typeof(NugetPackage));
+            using (FileStream fs = new FileStream(filename, FileMode.Open)) {
+                xrs = new XmlReaderSettings();
+                using (XmlReader reader = XmlReader.Create(fs, xrs)) {
+                    try {
+                        xde = new XmlDeserializationEvents();
+                        xde.OnUnknownAttribute = v1;
+                        xde.OnUnknownElement = v2;
+                        xde.OnUnknownNode = v3;
+                        xde.OnUnreferencedObject = v4;
+                        aPkg = xs.Deserialize(reader,xde) as NugetPackage;
+                    } catch (Exception ex) {
+                        Console.Error.WriteLine(ex.Message);
+                    }
+                }
+            }
+        }
+
+          void v1(Object sender, XmlAttributeEventArgs e) {
+            log(MethodBase.GetCurrentMethod(),e.ToString ());
+        }
+        void log(MethodBase mb, string msg) {
+            log(makeSig(mb) + ":" + msg);
+        }
+
+
+          void log(MethodBase mb) {
+            log(makeSig(mb));
+        }
+        void log(string msg) {
+            Console.Error.WriteLine(msg);
+        }
+          string makeSig(MethodBase mb) {
+            return mb.ReflectedType.Name + "." + mb.Name;
+        }
+
+        void v2(Object sender, XmlElementEventArgs e) {
+            throw new NotImplementedException();
+        }
+
+          void v3(Object sender, XmlNodeEventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        private void v4(Object sender, UnreferencedObjectEventArgs e) {
+            throw new NotImplementedException();
+        }
     }
+
+    [XmlRoot("package")]
+    public class NugetPackage { }
+
+
 }

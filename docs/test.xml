@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Foo</id>
+        <title>Foo</title>
+        <version>$version$</version>
+        <authors>NA</authors>
+        <owners>NA</owners>
+        <licenseUrl>http://Foo</licenseUrl>
+        <projectUrl>http://Foo</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Foo</description>
+        <releaseNotes>NA</releaseNotes>
+    </metadata>
+    <files>
+        <file src="obj\**\*.*" exclude="*.*" />
+    </files>
+</package>
