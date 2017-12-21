@@ -51,6 +51,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup Label="IDK">
+    <Compile Include="Source\NugetDependency.cs" />
+    <Compile Include="Source\NugetFile.cs" />
+    <Compile Include="Source\NugetFWAssembly.cs" />
+    <Compile Include="Source\NugetMetadata.cs" />
+    <Compile Include="Source\NugetPackage.cs" />
     <Compile Include="Source\TesterClass.cs" />
   </ItemGroup>
   <ItemGroup Label="References">

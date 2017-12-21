@@ -9,71 +9,104 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace NSTester {
-    
+
     public class TesterClass {
         public void readPackage(string filename) {
             XmlSerializer xs;
             XmlReaderSettings xrs;
             NugetPackage aPkg;
             XmlDeserializationEvents xde;
+            //string err;
 
+            //const string NS = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
+            //xs = new XmlSerializer(typeof(NugetPackage), ns);
             xs = new XmlSerializer(typeof(NugetPackage));
             using (FileStream fs = new FileStream(filename, FileMode.Open)) {
                 xrs = new XmlReaderSettings();
+
+                xrs.ValidationFlags = XmlSchemaValidationFlags.AllowXmlAttributes | XmlSchemaValidationFlags.ProcessIdentityConstraints | XmlSchemaValidationFlags.ProcessInlineSchema | XmlSchemaValidationFlags.ProcessSchemaLocation | XmlSchemaValidationFlags.ReportValidationWarnings;
+                //xrs.ValidationType = ValidationType.Auto;
+                xrs.ValidationEventHandler += Xrs_ValidationEventHandler;
                 using (XmlReader reader = XmlReader.Create(fs, xrs)) {
                     try {
                         xde = new XmlDeserializationEvents();
-                        xde.OnUnknownAttribute = v1;
-                        xde.OnUnknownElement = v2;
-                        xde.OnUnknownNode = v3;
-                        xde.OnUnreferencedObject = v4;
-                        aPkg = xs.Deserialize(reader,xde) as NugetPackage;
+                        xde.OnUnknownAttribute = foundUnknownAttribute;
+                        xde.OnUnknownElement = foundUnknownElement;
+                        xde.OnUnknownNode = foundUnknownNode;
+                        xde.OnUnreferencedObject = foundUnrefObject;
+                        aPkg = xs.Deserialize(reader, xde) as NugetPackage;
+                        Trace.WriteLine(filename+":"+aPkg.ToString ());
                     } catch (Exception ex) {
-                        Console.Error.WriteLine(ex.Message);
+                        //err = decompose(ex);
+                        //Trace.WriteLine(err);
+                        //Console.Error.WriteLine(err);
+                        throw new ApplicationException("error reading " + filename, ex);
                     }
                 }
             }
         }
 
-          void v1(Object sender, XmlAttributeEventArgs e) {
-            log(MethodBase.GetCurrentMethod(),e.ToString ());
+        public static string decompose(Exception ex) {
+            StringBuilder sb = new StringBuilder();
+            Exception ex2 = ex;
+
+            while (ex2 != null) {
+                sb.AppendLine("[" + ex2.GetType().FullName + "]");
+                sb.AppendLine(ex2.Message+Environment.NewLine);
+                ex2 = ex2.InnerException;
+            }
+            return sb.ToString();
+        }
+        void Xrs_ValidationEventHandler(Object sender, ValidationEventArgs e) {
+            log(MethodBase.GetCurrentMethod(), e.ToString());
+        }
+
+        void foundUnknownAttribute(Object sender, XmlAttributeEventArgs e) {
+            log(MethodBase.GetCurrentMethod(), e.ToString());
         }
         void log(MethodBase mb, string msg) {
             log(makeSig(mb) + ":" + msg);
         }
 
 
-          void log(MethodBase mb) {
+        void log(MethodBase mb) {
             log(makeSig(mb));
         }
         void log(string msg) {
             Console.Error.WriteLine(msg);
+#if TRACE
+            Trace.WriteLine(msg);
+#endif
         }
-          string makeSig(MethodBase mb) {
+        string makeSig(MethodBase mb) {
             return mb.ReflectedType.Name + "." + mb.Name;
         }
 
-        void v2(Object sender, XmlElementEventArgs e) {
-            throw new NotImplementedException();
+        void foundUnknownElement(Object sender, XmlElementEventArgs e) {
+            if (e.ObjectBeingDeserialized != null)
+                log(MethodBase.GetCurrentMethod(), e.ObjectBeingDeserialized.GetType().Name + " has child: " + e.Element.Name);
+            else
+                log(MethodBase.GetCurrentMethod(), "node " + e.Element.Name + " expecting " + e.ExpectedElements);
         }
 
-          void v3(Object sender, XmlNodeEventArgs e) {
-            throw new NotImplementedException();
+        void foundUnknownNode(Object sender, XmlNodeEventArgs e) {
+            if (e.ObjectBeingDeserialized != null)
+                log(MethodBase.GetCurrentMethod(), "unhandled element: " + e.Name + " with parent " + e.ObjectBeingDeserialized.GetType().Name);
+            else
+                log(MethodBase.GetCurrentMethod(), "unknown node: " + e.Name);
         }
 
-        private void v4(Object sender, UnreferencedObjectEventArgs e) {
-            throw new NotImplementedException();
+        void foundUnrefObject(Object sender, UnreferencedObjectEventArgs e) {
+            log(MethodBase.GetCurrentMethod(), e.ToString());
         }
     }
-
-    [XmlRoot("package")]
-    public class NugetPackage { }
-
-
 }
