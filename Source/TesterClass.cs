@@ -20,16 +20,18 @@ using System.Xml.Serialization;
 namespace NSTester {
 
     public class TesterClass {
-        public void readPackage(string filename) {
+        public NugetPackage readPackage(string filename) {
             XmlSerializer xs;
             XmlReaderSettings xrs;
-            NugetPackage aPkg;
+            NugetPackage aPkg=null;
             XmlDeserializationEvents xde;
             //string err;
 
             //const string NS = "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd";
             //xs = new XmlSerializer(typeof(NugetPackage), ns);
             xs = new XmlSerializer(typeof(NugetPackage));
+        
+
             using (FileStream fs = new FileStream(filename, FileMode.Open)) {
                 xrs = new XmlReaderSettings();
 
@@ -44,16 +46,48 @@ namespace NSTester {
                         xde.OnUnknownNode = foundUnknownNode;
                         xde.OnUnreferencedObject = foundUnrefObject;
                         aPkg = xs.Deserialize(reader, xde) as NugetPackage;
-                        Trace.WriteLine(filename+":"+aPkg.ToString ());
+                        //Trace.WriteLine(filename+":"+aPkg.ToString ());
                     } catch (Exception ex) {
                         //err = decompose(ex);
                         //Trace.WriteLine(err);
                         //Console.Error.WriteLine(err);
                         throw new ApplicationException("error reading " + filename, ex);
+                    } finally {
+                        xrs = null;
                     }
                 }
             }
+            xs = null;
+            return aPkg;
         }
+
+        public bool savePackage(string anArg, NugetPackage pkg) {
+            XmlSerializer xs = new XmlSerializer(pkg.GetType());
+            XmlWriterSettings xws;
+            bool ret = false;
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+            try {
+                using (FileStream fs=new FileStream(anArg , FileMode.Create)) {
+                    xws = new XmlWriterSettings();
+                    xws.Indent = true;
+                    xws.IndentChars = new string(' ', 4);
+                    xws.OmitXmlDeclaration = true;
+                    using (XmlWriter xw = XmlWriter.Create(fs, xws)) {
+                        xs.Serialize(xw, pkg,ns);
+                        ret = true;
+                    }
+
+                }
+            }catch(Exception ex) {
+                throw new ApplicationException("serialization error occurred", ex);
+            }finally {
+                xs = null;
+            }
+            return ret;
+        }
+
+          
 
         public static string decompose(Exception ex) {
             StringBuilder sb = new StringBuilder();

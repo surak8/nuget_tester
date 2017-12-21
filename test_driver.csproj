@@ -65,6 +65,12 @@
     <None Include="app.config" />
     <None Include="docs\FWAsm.nuspec" />
     <None Include="docs\simple.nuspec" />
+    <None Include="docs\simple.xsc">
+      <DependentUpon>simple.xsd</DependentUpon>
+    </None>
+    <None Include="docs\simple.xss">
+      <DependentUpon>simple.xsd</DependentUpon>
+    </None>
     <None Include="docs\WithDeps.nuspec" />
     <None Include="docs\WithFiles.nuspec" />
   </ItemGroup>
