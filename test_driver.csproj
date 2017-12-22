@@ -59,6 +59,7 @@
     <Content Include="docs\test2.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\CmdLineArgs.cs" />
     <Compile Include="Source\test_driver.cs" />
   </ItemGroup>
   <ItemGroup>

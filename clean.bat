@@ -1,5 +1,10 @@
 setlocal
 set NAME=test
 set NAME2=tester
-rd /q/s lib bin obj *.nuspec
-del /q/s lib%NAME%.dll  lib%NAME%.nuspec *.nupkg %NAME%.dll %NAME%.nuspec *.dll.config %NAME2%.nuspec
+set NAME3=test_driver
+set DF1=%NAME%.fix.nuspec
+set DF2=%NAME2%.dll %NAME2%.pdb %NAME2%.xml
+set DF3=%NAME3%.exe %NAME3%.exe.config %NAME3%.pdb %NAME3%.xml
+set DEL_FILES=*.nuspec %DF1% %DF2% %DF3%
+rd /q/s lib bin obj 
+del /q/s %DEL_FILES%
