@@ -16,6 +16,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using NSCommon.Logging;
 
 namespace NSTester {
 
@@ -89,58 +90,32 @@ namespace NSTester {
 
           
 
-        public static string decompose(Exception ex) {
-            StringBuilder sb = new StringBuilder();
-            Exception ex2 = ex;
 
-            while (ex2 != null) {
-                sb.AppendLine("[" + ex2.GetType().FullName + "]");
-                sb.AppendLine(ex2.Message+Environment.NewLine);
-                ex2 = ex2.InnerException;
-            }
-            return sb.ToString();
-        }
         void Xrs_ValidationEventHandler(Object sender, ValidationEventArgs e) {
-            log(MethodBase.GetCurrentMethod(), e.ToString());
+            MiniLogger. log(MethodBase.GetCurrentMethod(), e.ToString());
         }
 
         void foundUnknownAttribute(Object sender, XmlAttributeEventArgs e) {
-            log(MethodBase.GetCurrentMethod(), e.ToString());
+            MiniLogger.log(MethodBase.GetCurrentMethod(), e.ToString());
         }
-        void log(MethodBase mb, string msg) {
-            log(makeSig(mb) + ":" + msg);
-        }
-
-
-        void log(MethodBase mb) {
-            log(makeSig(mb));
-        }
-        void log(string msg) {
-            Console.Error.WriteLine(msg);
-#if TRACE
-            Trace.WriteLine(msg);
-#endif
-        }
-        string makeSig(MethodBase mb) {
-            return mb.ReflectedType.Name + "." + mb.Name;
-        }
+   
 
         void foundUnknownElement(Object sender, XmlElementEventArgs e) {
             if (e.ObjectBeingDeserialized != null)
-                log(MethodBase.GetCurrentMethod(), e.ObjectBeingDeserialized.GetType().Name + " has child: " + e.Element.Name);
+                MiniLogger.log(MethodBase.GetCurrentMethod(), e.ObjectBeingDeserialized.GetType().Name + " has child: " + e.Element.Name);
             else
-                log(MethodBase.GetCurrentMethod(), "node " + e.Element.Name + " expecting " + e.ExpectedElements);
+                MiniLogger.log(MethodBase.GetCurrentMethod(), "node " + e.Element.Name + " expecting " + e.ExpectedElements);
         }
 
         void foundUnknownNode(Object sender, XmlNodeEventArgs e) {
             if (e.ObjectBeingDeserialized != null)
-                log(MethodBase.GetCurrentMethod(), "unhandled element: " + e.Name + " with parent " + e.ObjectBeingDeserialized.GetType().Name);
+                MiniLogger.log(MethodBase.GetCurrentMethod(), "unhandled element: " + e.Name + " with parent " + e.ObjectBeingDeserialized.GetType().Name);
             else
-                log(MethodBase.GetCurrentMethod(), "unknown node: " + e.Name);
+                MiniLogger.log(MethodBase.GetCurrentMethod(), "unknown node: " + e.Name);
         }
 
         void foundUnrefObject(Object sender, UnreferencedObjectEventArgs e) {
-            log(MethodBase.GetCurrentMethod(), e.ToString());
+            MiniLogger.log(MethodBase.GetCurrentMethod(), e.ToString());
         }
     }
 }

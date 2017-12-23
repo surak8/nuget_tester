@@ -16,7 +16,7 @@ echo %CMD%
 call %CMD%
 if errorlevel 1 goto :UGH
 
-set CMD=test_driver -d -description "desc" -releasenotes "rnotes" test.nuspec
+set CMD=binx\debug\test_driver -d -description "desc" -releasenotes "rnotes" test.nuspec
 echo %CMD%
 call %CMD%
 if errorlevel 1 goto :UGH
@@ -29,7 +29,7 @@ call %CMD%
 if errorlevel 1 goto :UGH
 
 REM nuget push test.1.0.2.0.nupkg -source "\\appdeploy\appdeploy\Colt Software\NUGET"  -apikey 3cf63582-b815-4cd4-82ec-4b269fbc614b 
-set CMD=nuget push test.1.0.2.nupkg
+set CMD=nuget push test.1.0.3.nupkg
 echo %CMD%
 call %CMD%
 if errorlevel 1 goto :UGH

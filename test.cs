@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 
 namespace NSTest {
 	public class test {
-		public const string VERSION="1.0.2.0";
+		public const string VERSION="1.0.3.0";
 		[STAThread]
 		public static void Main(string[] args){
 			Environment.Exit(0);

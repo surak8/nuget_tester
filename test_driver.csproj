@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>binx\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>test_driver.xml</DocumentationFile>
+    <DocumentationFile>binx\debug\test_driver.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -57,6 +57,7 @@
   <ItemGroup>
     <Content Include="docs\test.xml" />
     <Content Include="docs\test2.xml" />
+    <Content Include="transform\blah.xslt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\CmdLineArgs.cs" />
@@ -66,12 +67,6 @@
     <None Include="app.config" />
     <None Include="docs\FWAsm.nuspec" />
     <None Include="docs\simple.nuspec" />
-    <None Include="docs\simple.xsc">
-      <DependentUpon>simple.xsd</DependentUpon>
-    </None>
-    <None Include="docs\simple.xss">
-      <DependentUpon>simple.xsd</DependentUpon>
-    </None>
     <None Include="docs\WithDeps.nuspec" />
     <None Include="docs\WithFiles.nuspec" />
   </ItemGroup>

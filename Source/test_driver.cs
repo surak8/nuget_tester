@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using NSCommon.Logging;
 using NSTester;
 
 namespace NSTestDriver {
@@ -62,7 +63,7 @@ namespace NSTestDriver {
                         }
                     }
                 } catch (Exception ex) {
-                    err = TesterClass.decompose(ex);
+                    err = MiniLogger.decompose(ex);
                     Console.Error.WriteLine(err);
                     Trace.WriteLine(err);
                     exitCode = 2;

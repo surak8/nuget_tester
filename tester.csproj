@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\debug\</OutputPath>
+    <OutputPath>binx\debug\lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\debug\tester.XML</DocumentationFile>
+    <DocumentationFile>binx\debug\lib\tester.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -51,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup Label="IDK">
+    <Compile Include="Source\MiniLogger.cs" />
     <Compile Include="Source\NugetDependency.cs" />
     <Compile Include="Source\NugetFile.cs" />
     <Compile Include="Source\NugetFWAssembly.cs" />
