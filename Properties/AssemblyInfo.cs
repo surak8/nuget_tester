@@ -7,13 +7,15 @@ using System.Runtime.InteropServices;
 [assembly:AssemblyCompany("Rik Cousens")]
 [assembly:AssemblyCopyright("Copyright © 2017, Rik Cousens")]
 #if DEBUG
-[assembly:AssemblyConfiguration("Debug assemblyVersion")]
+[assembly:AssemblyConfiguration("Debug version")]
 #else
-[assembly:AssemblyConfiguration("Release assemblyVersion")]
+[assembly:AssemblyConfiguration("Release version")]
 #endif
 [assembly:ComVisible(false)]
 
-[assembly:AssemblyVersion("1.0.0.0")]
-[assembly:AssemblyFileVersion("1.0.0.0")]
-[assembly:AssemblyInformationalVersion("1.0.0.0")]
-
+// FileVersion FileBuildPart, FileMajorPart FileMinorPart FilePrivatePart
+// ProductVersion ProductBuildPart, ProductMajorPart, ProductMinorPart, Pro
+[assembly: AssemblyFileVersion("1.0.2.1")] // FileVersion, if exists.
+[assembly: AssemblyInformationalVersion("1.0.3.2")] // ProductVersion, if exists.
+// 1.0.3.2 = ProductMajorPart, ProductMinorPart, ProductBuildPart, ProductPrivatePart
+[assembly: AssemblyVersion("1.0.1.0")]

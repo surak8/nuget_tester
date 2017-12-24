@@ -7,11 +7,11 @@
         omit-xml-declaration="yes"
         indent="yes" />
 
-    <xsl:param name="idValue"/>
-    <xsl:param name="descValue"/>
-    <xsl:param name="versionValue"/>
-    <xsl:param name="authorsValue"/>
-
+    <xsl:variable name="apos">'</xsl:variable>
+    <xsl:param name="idValue" select="concat($apos,'idValue',$apos,' not set.')"/>
+    <xsl:param name="descValue" select="concat($apos,'idValue',$apos,' not set.')"/>
+    <xsl:param name="versionValue" select="concat($apos,'versionValue',$apos,' not set.')"/>
+    <xsl:param name="authorsValue" select="concat($apos,'authorsValue',$apos,' not set.')"/>
     <!--<package>
     <metadata>
         <id>someid</id>
