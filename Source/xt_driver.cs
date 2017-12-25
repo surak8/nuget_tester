@@ -7,6 +7,8 @@ using System.Xml.Xsl;
 using NSCommon.Logging;
 
 // -xtransform\makenuspec.xslt -o test.xml test.nuspec -a boss_id=test -o test.nuspec -f tester.dll
+// -v -f tester.dll -x transform\DefaultPackage.xslt xt.xml -o default.nuspec -a idValue=riktest
+// -f tester.dll -x transform\defaultpackage.xslt -v
 namespace NSXslTransform {
     public static class driver {
         #region main-line methods
@@ -34,13 +36,15 @@ namespace NSXslTransform {
             }
             Environment.Exit(exitCode);
         }
+        #endregion
 
-          static void showUsage(int exitCode) {
+        static void showUsage(int exitCode) {
             Console.Error.WriteLine("usage: " + Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]) +
-                " [-v] [-a key=value]... [-f assemblyPathToUse] [-o outputfile] -x transform-file input-file");
+                " [-Ov] [-a key=value]... [-f assemblyPathToUse] [-o outputfile] -x transform-file input-file");
+            Console.Error.WriteLine("-O\tOverrite derived arguments from -a command.");
+            Console.Error.WriteLine("-v\tverbose processing");
             Environment.Exit(exitCode);
         }
-        #endregion
 
         #region fields
         static XmlWriterSettings _xws;

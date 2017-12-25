@@ -10,7 +10,7 @@ namespace NSXslTransform {
 
         internal XTArgs(string[] args) {
             int i, n, arglen;
-            string arg, argValues,filename,value;
+            string arg, argValues, filename, value;
             char achar;
             FileVersionInfo fvi;
 
@@ -40,23 +40,23 @@ namespace NSXslTransform {
                                     fvi = FileVersionInfo.GetVersionInfo(filename);
                                     MiniLogger.log(MethodBase.GetCurrentMethod());
                                     if (!string.IsNullOrEmpty(value = fvi.ProductName))
-                                        this.arguments.Add("idValue", value);
+                                        addArgument("idValue", value);
                                     if (!string.IsNullOrEmpty(value = fvi.FileDescription))
-                                        this.arguments.Add("descValue", value);
+                                        addArgument("descValue", value);
                                     if (!string.IsNullOrEmpty(value = fvi.FileVersion))
-                                        this.arguments.Add("versionValue", value);
+                                        addArgument("versionValue", value);
                                     if (!string.IsNullOrEmpty(value = fvi.CompanyName))
-                                        this.arguments.Add("authorsValue", value);
-
+                                        addArgument("authorsValue", value);
                                 }
 
                                 break;
+                            case 'O': this.overwrite = true; break;
                             case 'o': // outputfile
                                 if (arglen > 2) outputFile = arg.Substring(2);
                                 else this.outputFile = args[++i];
 
                                 break;
-                            case 'v': verbose = true;break;
+                            case 'v': verbose = true; break;
                             case 'x':
                                 if (arglen > 2) {
                                     transformFile = arg.Substring(2);
@@ -77,29 +77,40 @@ namespace NSXslTransform {
         }
 
         void parseXsltArguments(string argValues) {
-            MiniLogger.log(MethodBase.GetCurrentMethod());
+            //MiniLogger.log(MethodBase.GetCurrentMethod());
             string[] argPairs;
-            string tmp,key,value;
+            string tmp, key, value;
             int pos;
 
             if (!string.IsNullOrEmpty(argValues)) {
                 if ((argPairs = argValues.Split(';')) != null && argPairs.Length > 0) {
-                    foreach(string apair in argPairs) {
+                    foreach (string apair in argPairs) {
                         tmp = apair.Trim();
-                        if ((pos=tmp  .IndexOf('=')) > 0) {
+                        if ((pos = tmp.IndexOf('=')) > 0) {
                             key = tmp.Substring(0, pos).Trim();
                             value = tmp.Substring(pos + 1).Trim();
-                            if (!this.arguments.ContainsKey(key)) {
-                                if (verbose)
-                                    MiniLogger.log("Adding " + key + " = " + value);
-                                arguments.Add(key, value);
-                            } else
-                                MiniLogger.log(
-                                    MethodBase.GetCurrentMethod(),
-                                    "duplicate value for key: " + key + " [prev=" + arguments[key] + "], new value=" + value);
+                            addArgument(key, value);
                         }
                     }
                 }
+            }
+        }
+
+        void addArgument(string key, string value) {
+            if (!this.arguments.ContainsKey(key)) {
+                if (verbose)
+                    MiniLogger.log("Adding " + key + " = " + value);
+                arguments.Add(key, value);
+            } else {
+                if (overwrite) {
+                    if (verbose)
+                        MiniLogger.log("Replacing old value of " + key + " from " + arguments[key] + " to " + value);
+                    arguments[key] = value;
+                    //arguments.Add(key, value);
+                } else
+                    MiniLogger.log(
+                        MethodBase.GetCurrentMethod(),
+                        "duplicate value for key: " + key + " [prev=" + arguments[key] + "], new value=" + value);
             }
         }
 
@@ -110,5 +121,6 @@ namespace NSXslTransform {
         public string outputFile { get; private set; }
         public string transformFile { get; private set; }
         public bool verbose { get; private set; }
+        public bool overwrite { get; private set; }
     }
 }
