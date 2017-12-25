@@ -62,11 +62,5 @@
     <None Include="transform\testit.bat" />
     <None Include="transform\testit.nat" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="tester.csproj">
-      <Project>{3895f133-4083-4e1d-9502-c9dd06a2cfa4}</Project>
-      <Name>tester</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
