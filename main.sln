@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xt", "projects\xt\xt.csproj", "{1E14CB11-3424-4235-AF89-E89ED81DB1FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonUtils", "projects\CommonUtils\CommonUtils.csproj", "{82AE9A30-C62D-4B4B-8372-A6DB85CAB49E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tester", "projects\tester\tester.csproj", "{3895F133-4083-4E1D-9502-C9DD06A2CFA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_driver", "projects\tester\driver\test_driver.csproj", "{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E14CB11-3424-4235-AF89-E89ED81DB1FD}.Debug|x86.ActiveCfg = Debug|x86
+		{1E14CB11-3424-4235-AF89-E89ED81DB1FD}.Debug|x86.Build.0 = Debug|x86
+		{1E14CB11-3424-4235-AF89-E89ED81DB1FD}.Release|x86.ActiveCfg = Release|x86
+		{1E14CB11-3424-4235-AF89-E89ED81DB1FD}.Release|x86.Build.0 = Release|x86
+		{82AE9A30-C62D-4B4B-8372-A6DB85CAB49E}.Debug|x86.ActiveCfg = Debug|x86
+		{82AE9A30-C62D-4B4B-8372-A6DB85CAB49E}.Debug|x86.Build.0 = Debug|x86
+		{82AE9A30-C62D-4B4B-8372-A6DB85CAB49E}.Release|x86.ActiveCfg = Release|x86
+		{82AE9A30-C62D-4B4B-8372-A6DB85CAB49E}.Release|x86.Build.0 = Release|x86
+		{3895F133-4083-4E1D-9502-C9DD06A2CFA4}.Debug|x86.ActiveCfg = Debug|x86
+		{3895F133-4083-4E1D-9502-C9DD06A2CFA4}.Debug|x86.Build.0 = Debug|x86
+		{3895F133-4083-4E1D-9502-C9DD06A2CFA4}.Release|x86.ActiveCfg = Release|x86
+		{3895F133-4083-4E1D-9502-C9DD06A2CFA4}.Release|x86.Build.0 = Release|x86
+		{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}.Debug|x86.ActiveCfg = Debug|x86
+		{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}.Debug|x86.Build.0 = Debug|x86
+		{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}.Release|x86.ActiveCfg = Release|x86
+		{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

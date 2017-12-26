@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3895F133-4083-4E1D-9502-C9DD06A2CFA4}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NSTester</RootNamespace>
-    <AssemblyName>tester</AssemblyName>
+    <RootNamespace>NSTest_driver</RootNamespace>
+    <AssemblyName>test_driver</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>binx\debug\lib\</OutputPath>
+    <OutputPath>..\..\..\bin\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>binx\debug\lib\tester.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\bin\debug\test_driver.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -32,11 +32,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\release\</OutputPath>
+    <OutputPath>.\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\release\tester.XML</DocumentationFile>
+    <DocumentationFile>test_driver.xml</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -44,26 +44,27 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <ItemGroup Label="None">
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup Label="AssemblyInfo">
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup Label="IDK">
-    <Compile Include="Source\MiniLogger.cs" />
-    <Compile Include="Source\NugetDependency.cs" />
-    <Compile Include="Source\NugetFile.cs" />
-    <Compile Include="Source\NugetFWAssembly.cs" />
-    <Compile Include="Source\NugetMetadata.cs" />
-    <Compile Include="Source\NugetPackage.cs" />
-    <Compile Include="Source\TesterClass.cs" />
-  </ItemGroup>
   <ItemGroup Label="References">
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonUtils\CommonUtils.csproj">
+      <Project>{82ae9a30-c62d-4b4b-8372-a6db85cab49e}</Project>
+      <Name>CommonUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tester.csproj">
+      <Project>{3895f133-4083-4e1d-9502-c9dd06a2cfa4}</Project>
+      <Name>tester</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\common\Properties\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\CmdLineArgs.cs" />
+    <Compile Include="Source\test_driver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

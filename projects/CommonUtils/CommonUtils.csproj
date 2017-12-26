@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{82AE9A30-C62D-4B4B-8372-A6DB85CAB49E}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NSTest_driver</RootNamespace>
-    <AssemblyName>test_driver</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>NSCommon</RootNamespace>
+    <AssemblyName>CommonUtils</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -19,56 +19,40 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>binx\debug\</OutputPath>
+    <OutputPath>..\..\bin\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>binx\debug\test_driver.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\debug\CommonUtils.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>test_driver.xml</DocumentationFile>
+    <DocumentationFile>bin\release\CommonUtils.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <ItemGroup Label="AssemblyInfo">
+    <Compile Include="..\common\Properties\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\MiniLogger.cs" />
+  </ItemGroup>
   <ItemGroup Label="References">
     <Reference Include="System" />
     <Reference Include="System.Data" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="tester.csproj">
-      <Project>{3895f133-4083-4e1d-9502-c9dd06a2cfa4}</Project>
-      <Name>tester</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="docs\test.xml" />
-    <Content Include="docs\test2.xml" />
-    <Content Include="transform\blah.xslt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Source\CmdLineArgs.cs" />
-    <Compile Include="Source\test_driver.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="docs\FWAsm.nuspec" />
-    <None Include="docs\simple.nuspec" />
-    <None Include="docs\WithDeps.nuspec" />
-    <None Include="docs\WithFiles.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

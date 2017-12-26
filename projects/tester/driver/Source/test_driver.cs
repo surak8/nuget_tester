@@ -17,7 +17,7 @@ namespace NSTestDriver {
             NugetPackage pkg;
             CmdLineArgs ca;
             //bool doDefault = false, needsSave = false;
-            bool needsSave = false,otherSave;
+            bool needsSave = false, otherSave;
             int nargs;
             List<string> files;
             string err;
@@ -46,17 +46,17 @@ namespace NSTestDriver {
                                         pkg.resetValues();
                                         needsSave = true;
                                     }
-                                    
+
                                     otherSave = ca.applyChanges(pkg);
                                     //nnedspkg.applyChanges(ca);
                                 }
                                 if (needsSave) {
                                     //tc.savePackage(aFile, pkg);
                                     tc.savePackage(
-                                        Path.Combine (
-                                            Path.GetDirectoryName (aFile ),
-                                            Path.GetFileNameWithoutExtension(aFile )+".fix"+
-                                            Path.GetExtension (aFile )), 
+                                        Path.Combine(
+                                            Path.GetDirectoryName(aFile),
+                                            Path.GetFileNameWithoutExtension(aFile) + ".fix" +
+                                            Path.GetExtension(aFile)),
                                         pkg);
                                 }
                             }
