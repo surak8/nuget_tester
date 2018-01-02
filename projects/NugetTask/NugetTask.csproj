@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4C5EC95B-0132-4EAA-8FEC-4522EA2A7759}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{E2AF49EC-5BC0-43B8-8A23-3AC796F46A9F}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NSTest_driver</RootNamespace>
-    <AssemblyName>test_driver</AssemblyName>
+    <RootNamespace>NSNugetTask</RootNamespace>
+    <AssemblyName>NugetTask</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\debug\</OutputPath>
+    <OutputPath>bin\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\bin\debug\test_driver.XML</DocumentationFile>
+    <DocumentationFile>bin\debug\NugetTask.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -32,11 +32,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>test_driver.xml</DocumentationFile>
+    <DocumentationFile>bin\release\NugetTask.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -44,30 +44,28 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <ItemGroup Label="None">
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup Label="AssemblyInfo">
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\MyDictionary.cs" />
+    <Compile Include="Source\NugetTask.cs" />
+    <Compile Include="Source\TestTaskItem.cs" />
+  </ItemGroup>
   <ItemGroup Label="References">
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CommonUtils\CommonUtils.csproj">
+    <None Include="Tester.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj">
       <Project>{82ae9a30-c62d-4b4b-8372-a6db85cab49e}</Project>
       <Name>CommonUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\tester.csproj">
-      <Project>{3895f133-4083-4e1d-9502-c9dd06a2cfa4}</Project>
-      <Name>tester</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\common\Properties\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\CmdLineArgs.cs" />
-    <Compile Include="Source\test_driver.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

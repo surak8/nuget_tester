@@ -9,6 +9,9 @@ using NSCommon.Logging;
 // -xtransform\makenuspec.xslt -o test.xml test.nuspec -a boss_id=test -o test.nuspec -f tester.dll
 // -v -f tester.dll -x transform\DefaultPackage.xslt xt.xml -o default.nuspec -a idValue=riktest
 // -f tester.dll -x transform\defaultpackage.xslt -v
+// -O -v -f tester.dll -x transform\DefaultPackage.xslt xt.xml -o default.nuspec -a idValue=riktest
+// -v -x transform\DefaultPackage.xslt test.txt
+
 namespace NSXslTransform {
     public static class driver {
         #region main-line methods
@@ -102,6 +105,13 @@ namespace NSXslTransform {
                 if (!string.IsNullOrEmpty(args.outputFile))
                     MiniLogger.log(MethodBase.GetCurrentMethod(), Environment.NewLine + "transformed into :" +
                         (string.IsNullOrEmpty(args.outputFile) ? "<stdout>" : args.outputFile));
+            } catch (XmlException xe) {
+                ret = 1;
+                throw new ApplicationException("XML Exception ", xe);
+            } catch (DirectoryNotFoundException dnfe) {
+                ret = 1;
+                throw new ApplicationException("Directory not found", dnfe);
+           
             } catch (Exception ex) {
                 MiniLogger.log(MethodBase.GetCurrentMethod(), ex);
                 ret = 1;

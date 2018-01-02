@@ -9,7 +9,7 @@
 
     <xsl:variable name="apos">'</xsl:variable>
     <xsl:param name="idValue" select="concat($apos,'idValue',$apos,' not set.')"/>
-    <xsl:param name="descValue" select="concat($apos,'idValue',$apos,' not set.')"/>
+    <xsl:param name="descValue" select="concat($apos,'descValue',$apos,' not set.')"/>
     <xsl:param name="versionValue" select="concat($apos,'versionValue',$apos,' not set.')"/>
     <xsl:param name="authorsValue" select="concat($apos,'authorsValue',$apos,' not set.')"/>
     <!--<package>

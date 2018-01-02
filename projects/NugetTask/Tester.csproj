@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+    <UsingTask TaskName="NSNugetTask.GenerateNugetSpec"   
+        AssemblyFile="bin\debug\NugetTask.dll"/>  
+  
+    <Target Name="MyTarget">  
+        <GenerateNugetSpec MyProperty="Hello!">  
+			<Output TaskParameter="singleResult"  
+				PropertyName="singleResultItem" />
+            <Output TaskParameter="results"
+				ItemName="resultsItemName" />
+		<!--
+			<Output TaskParameter="singleResultItem"  
+				ItemName="singleResult" />  
+				-->
+				<!--
+			<Output TaskParameter="results"  
+				PropertyName="resultsProp" /> 
+				-->
+		</GenerateNugetSpec>
+        <!--<Message Importance="High" Text="found-0 %(singleResultItem)."/>
+        <Message Importance="High" Text="found-2 $(singleResultItem)."/>-->
+    </Target>  
+</Project>  
