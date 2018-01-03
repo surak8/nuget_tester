@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_driver", "projects\tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetTask", "projects\NugetTask\NugetTask.csproj", "{E2AF49EC-5BC0-43B8-8A23-3AC796F46A9F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{300CF1BD-23C8-4FB3-A651-993BABCB4902}"
+	ProjectSection(SolutionItems) = preProject
+		test.nuspec = test.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

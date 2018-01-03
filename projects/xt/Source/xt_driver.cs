@@ -11,6 +11,8 @@ using NSCommon.Logging;
 // -f tester.dll -x transform\defaultpackage.xslt -v
 // -O -v -f tester.dll -x transform\DefaultPackage.xslt xt.xml -o default.nuspec -a idValue=riktest
 // -v -x transform\DefaultPackage.xslt test.txt
+// -v -x transform\DefaultPackage.xslt test.xml -a idValue=zzz;descValue=desc;authorsValue=a;versionValue=v
+
 
 namespace NSXslTransform {
     public static class driver {
@@ -96,10 +98,16 @@ namespace NSXslTransform {
                             t.Transform(args.inputFile, argsList, xw);
                         }
                     } else {
+#if true
+                        using (XmlWriter xw = XmlWriter.Create(args.outputFile, settings)) {
+                            t.Transform(args.inputFile, argsList, xw);
+                        }
+#else
                         using (StreamWriter sw = new StreamWriter(args.outputFile)) {
                             t.Transform(args.inputFile, argsList, sw);
                             //sw.WriteLine(Environment.NewLine);
                         }
+#endif
                     }
                 }
                 if (!string.IsNullOrEmpty(args.outputFile))

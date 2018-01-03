@@ -25,6 +25,10 @@ namespace NSCommon.Logging {
             log(makeSig(mb) + ":" + msg);
         }
 
+        public static void log(MethodBase mb,string fmt,params object[] args) {
+            log(makeSig(mb)+":"+string.Format(fmt,args));
+        }
+
         public static void log(MethodBase mb) {
             log(makeSig(mb));
         }

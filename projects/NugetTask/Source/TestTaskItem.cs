@@ -29,7 +29,7 @@ namespace NSNugetTask {
 
         internal TestTaskItem(string key, string avalue) : this() {
             if (verbose)
-                MiniLogger.log(MethodBase.GetCurrentMethod(), new object[] { key,avalue });
+                MiniLogger.log(MethodBase.GetCurrentMethod(), "{0}={1}",new object[] { key,avalue });
             this.SetMetadata(key, avalue);
         }
         #endregion
@@ -104,6 +104,7 @@ namespace NSNugetTask {
         public void SetMetadata(string metadataName, string metadataValue) {
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod(),
+                    "{0}={1}",
                     new object[] { metadataName, metadataValue });
                     //"[," + metadataName + "] = " + metadataValue);
             if (_map.ContainsKey(metadataName))

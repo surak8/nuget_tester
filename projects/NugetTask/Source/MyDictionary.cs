@@ -37,7 +37,7 @@ namespace NSNugetTask {
             set {
                 string akey = key.ToString();
                 if (verbose)
-                    MiniLogger.log(MethodBase.GetCurrentMethod(), new object[] { akey, value.ToString() });
+                    MiniLogger.log(MethodBase.GetCurrentMethod(),"{0}={1}", new object[] { akey, value.ToString() });
                 if (_map.ContainsKey(akey))
                     _map[akey] = value.ToString();
                 else
@@ -119,7 +119,7 @@ namespace NSNugetTask {
 
         void IDictionary.Add(object key, object value) {
             if (verbose)
-                MiniLogger.log(MethodBase.GetCurrentMethod(),new object[] { key, value });
+                MiniLogger.log(MethodBase.GetCurrentMethod(),"{0}={1}",new object[] { key, value });
             _map.Add(key.ToString(), value.ToString());
         }
 
@@ -131,13 +131,13 @@ namespace NSNugetTask {
 
         bool IDictionary.Contains(object key) {
             if (verbose)
-                MiniLogger.log(MethodBase.GetCurrentMethod(),new object[] { key });
+                MiniLogger.log(MethodBase.GetCurrentMethod(),"Key={0}", new object[] { key });
             throw new NotImplementedException();
         }
 
         void ICollection.CopyTo(Array array, int index) {
             if (verbose)
-                MiniLogger.log(MethodBase.GetCurrentMethod(),new object[] { array, index });
+                MiniLogger.log(MethodBase.GetCurrentMethod(),"[{0}]={1}",new object[] { array, index });
             throw new NotImplementedException();
         }
 
@@ -153,7 +153,7 @@ namespace NSNugetTask {
 
         void IDictionary.Remove(object key) {
             if (verbose)
-                MiniLogger.log(MethodBase.GetCurrentMethod(),new object[] { key });
+                MiniLogger.log(MethodBase.GetCurrentMethod(),"Key={0}",new object[] { key });
             throw new NotImplementedException();
         }
     }
