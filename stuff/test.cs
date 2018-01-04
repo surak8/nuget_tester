@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly:AssemblyTitle("AssemblyTitle - tmp")]
-[assembly:AssemblyProduct("AssemblyProduct - tmp")]
+[assembly:AssemblyProduct("ID_AssemblyProduct")]
 [assembly:AssemblyDescription("description of tmp.")]
 [assembly:AssemblyCompany("Colt Manufacturing LLC.")]
 [assembly:AssemblyCopyright("Copyright © 2017-2018, Colt Manufacturing LLC.")]
