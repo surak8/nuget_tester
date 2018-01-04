@@ -26,6 +26,15 @@ namespace NSRead_meta {
             } else {
                 foreach(string anArg in args) {
                     try {
+                        //System.Diagnostics.Trace.WriteLine("jere");
+                        var avar = System.Diagnostics.FileVersionInfo.GetVersionInfo(anArg);
+                        System.Diagnostics.Trace.WriteLine("jere");
+                        // AssemblyDescription = Comments
+                        // AssemblyCompany = CompanyName
+                        // AssemblyCopyright = LegalCoyright
+                        // AssemblyFileVersion = FileVersion : FileMajorPar, FileMinorPart, FileBuildPart, FilePrivate Part
+                        // AssemblyInformationalVersion = ProductVersion: ProductMajorPart, ProductMinorPart, ProductBuildPart, ProductPrivatePart
+
 
                     } catch (Exception ex) {
                         MiniLogger.log(MethodBase.GetCurrentMethod(), ex);
