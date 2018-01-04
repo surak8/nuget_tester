@@ -15,8 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetTask", "projects\Nuget
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{300CF1BD-23C8-4FB3-A651-993BABCB4902}"
 	ProjectSection(SolutionItems) = preProject
+		fixup.xslt = fixup.xslt
 		test.nuspec = test.nuspec
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "read_meta", "read_meta\read_meta.csproj", "{95C2617B-CE50-4733-A2B9-59914D9AB9AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +47,10 @@ Global
 		{E2AF49EC-5BC0-43B8-8A23-3AC796F46A9F}.Debug|x86.Build.0 = Debug|x86
 		{E2AF49EC-5BC0-43B8-8A23-3AC796F46A9F}.Release|x86.ActiveCfg = Release|x86
 		{E2AF49EC-5BC0-43B8-8A23-3AC796F46A9F}.Release|x86.Build.0 = Release|x86
+		{95C2617B-CE50-4733-A2B9-59914D9AB9AA}.Debug|x86.ActiveCfg = Debug|x86
+		{95C2617B-CE50-4733-A2B9-59914D9AB9AA}.Debug|x86.Build.0 = Debug|x86
+		{95C2617B-CE50-4733-A2B9-59914D9AB9AA}.Release|x86.ActiveCfg = Release|x86
+		{95C2617B-CE50-4733-A2B9-59914D9AB9AA}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
