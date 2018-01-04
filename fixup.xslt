@@ -24,6 +24,7 @@
             <xsl:copy-of select="./id"/>
             <xsl:copy-of select="./version"/>
             <xsl:copy-of select="./description"/>
+            <xsl:copy-of select="./authors"/>
 
             <xsl:if test="$vOwners!=''">
                 <xsl:element name="owners">

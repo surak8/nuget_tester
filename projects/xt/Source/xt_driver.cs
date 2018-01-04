@@ -16,6 +16,26 @@ using NSCommon.Logging;
 
 namespace NSXslTransform {
     public static class driver {
+        #region fields
+        static XmlWriterSettings _xws;
+        #endregion
+
+        #region properties
+        static XmlWriterSettings settings {
+            get {
+                if (_xws == null) {
+                    _xws = new XmlWriterSettings();
+                    _xws.Indent = true;
+                    _xws.IndentChars = new string(' ', 4);
+                    _xws.OmitXmlDeclaration = true;
+                    _xws.Encoding = Encoding.ASCII;
+                }
+                return _xws;
+            }
+        }
+        #endregion
+
+        #region methods
         #region main-line methods
         [STAThread]
         public static void Main(string[] args) {
@@ -43,38 +63,10 @@ namespace NSXslTransform {
         }
         #endregion
 
-        static void showUsage(int exitCode) {
-            Console.Error.WriteLine("usage: " + Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]) +
-                " [-Ov] [-a key=value]... [-f assemblyPathToUse] [-o outputfile] -x transform-file input-file");
-            Console.Error.WriteLine("-O\tOverrite derived arguments from -a command.");
-            Console.Error.WriteLine("-v\tverbose processing");
-            Environment.Exit(exitCode);
-        }
-
-        #region fields
-        static XmlWriterSettings _xws;
-        #endregion
-
-        #region properties
-        static XmlWriterSettings settings {
-            get {
-                if (_xws == null) {
-                    _xws = new XmlWriterSettings();
-                    _xws.Indent = true;
-                    _xws.IndentChars = new string(' ', 4);
-                    _xws.OmitXmlDeclaration = true;
-                    _xws.Encoding = Encoding.ASCII;
-                }
-                return _xws;
-            }
-        }
-        #endregion
-
         static int processArgs(XTArgs args) {
             int ret = 0;
             XslCompiledTransform t;
             XsltArgumentList argsList;
-            string ext;
 
             try {
                 t = new XslCompiledTransform(true);
@@ -83,48 +75,54 @@ namespace NSXslTransform {
                 foreach (string akey in args.arguments.Keys)
                     argsList.AddParam(akey, string.Empty, args.arguments[akey]);
 
-                MiniLogger.log(MethodBase.GetCurrentMethod(), "using transform: " + args.transformFile);
+                if (args.verbose)
+                    MiniLogger.log("[VERBOSE] " + "using transform: " + args.transformFile);
                 t.Load(args.transformFile);
 
-                MiniLogger.log(MethodBase.GetCurrentMethod(), "transforming " + args.inputFile);
+                if (args.verbose)
+                    MiniLogger.log("[VERBOSE] " + "transforming " + args.inputFile);
+
+                XmlWriter xw = null;
 
                 if (string.IsNullOrEmpty(args.outputFile)) {
-                    t.Transform(args.inputFile, argsList, Console.Out);
+                    settings.CloseOutput = false;
+                    xw = XmlWriter.Create(Console.Out, settings);
                 } else {
-                    ext = Path.GetExtension(args.outputFile);
-                    if (string.Compare(ext, ".xml", true) == 0 ||
-                        string.Compare(ext, ".nuspec", true) == 0) {
-                        using (XmlWriter xw = XmlWriter.Create(args.outputFile, settings)) {
-                            t.Transform(args.inputFile, argsList, xw);
-                        }
-                    } else {
-#if true
-                        using (XmlWriter xw = XmlWriter.Create(args.outputFile, settings)) {
-                            t.Transform(args.inputFile, argsList, xw);
-                        }
-#else
-                        using (StreamWriter sw = new StreamWriter(args.outputFile)) {
-                            t.Transform(args.inputFile, argsList, sw);
-                            //sw.WriteLine(Environment.NewLine);
-                        }
-#endif
-                    }
+                    xw = XmlWriter.Create(args.outputFile, settings);
                 }
-                if (!string.IsNullOrEmpty(args.outputFile))
-                    MiniLogger.log(MethodBase.GetCurrentMethod(), Environment.NewLine + "transformed into :" +
-                        (string.IsNullOrEmpty(args.outputFile) ? "<stdout>" : args.outputFile));
+                if (xw != null) {
+                    t.Transform(args.inputFile, argsList, xw);
+                    xw.Close();
+                    xw.Dispose();
+                    xw = null;
+                }
+                if (args.verbose) {
+                    if (string.IsNullOrEmpty(args.outputFile))
+                        Console.Out.WriteLine();
+                    MiniLogger.log("[VERBOSE] " + "transformed into :" +
+                            (string.IsNullOrEmpty(args.outputFile) ? "<stdout>" : args.outputFile));
+                }
             } catch (XmlException xe) {
                 ret = 1;
                 throw new ApplicationException("XML Exception ", xe);
             } catch (DirectoryNotFoundException dnfe) {
                 ret = 1;
                 throw new ApplicationException("Directory not found", dnfe);
-           
+
             } catch (Exception ex) {
                 MiniLogger.log(MethodBase.GetCurrentMethod(), ex);
                 ret = 1;
             }
             return ret;
         }
+
+        static void showUsage(int exitCode) {
+            Console.Error.WriteLine("usage: " + Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]) +
+                " [-Ov] [-a key=value]... [-f assemblyPathToUse] [-o outputfile] -x transform-file input-file");
+            Console.Error.WriteLine("-O\tOverrite derived arguments from -a command.");
+            Console.Error.WriteLine("-v\tverbose processing");
+            Environment.Exit(exitCode);
+        }
+        #endregion
     }
 }
