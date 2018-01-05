@@ -1,13 +1,13 @@
 @echo off
 setlocal
-set DLL=%~dp0test.dll
+set DLL=%~dp0..\test.dll
 set IN_SPEC=test.nuspec
 set OUT_SPEC=blah.nuspec
-set EXEC1=%~dp0bin\debug\xt.exe
+set EXEC1=%~dp0..\bin\debug\xt.exe
 
 if not exist "%DLL%" (
 echo BLAH
-set CMD=csc -nologo %~dp0stuff\test.cs -out:"%DLL%" -t:library -D:DEBUG -debug:full
+set CMD=csc -nologo "%~dp0..\stuff\test.cs" -out:"%DLL%" -t:library -D:DEBUG -debug:full
 echo.
 echo CMD=%CMD%
 call %CMD%
@@ -41,7 +41,7 @@ exit /b 1
 )
 )
 
-set CMD=%EXEC1% -v -x fixup.xslt %IN_SPEC% -a vOwners=rik  -o %OUT_SPEC%
+set CMD=%EXEC1% -v -x "%~dp0..\transform\fixup.xslt" %IN_SPEC% -a vOwners=rik  -o %OUT_SPEC%
 echo %CMD%
 call %CMD%
 if errorlevel 1 (

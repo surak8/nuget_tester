@@ -9,7 +9,7 @@
     <xsl:param name="Boss_ID" select="'invalid'"/>
 
     <xsl:template match="/package/metadata/id" mode="batRemark">
-        <xsl:value-of select ="Oconcat('set ID=',text(),'&#x0d;')"/>
+        <xsl:value-of select ="concat('set ID=',text(),'&#x0d;')"/>
     </xsl:template>
     
     <xsl:template match="/package/metadata/version" mode="batRemark">
