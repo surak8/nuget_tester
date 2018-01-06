@@ -1,0 +1,41 @@
+<!-- https://msdn.microsoft.com/en-us/library/dd576348.aspx -->
+<Project DefaultTargets = "Compile"
+xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+    <UsingTask TaskName="NSFake.Csc1"
+        AssemblyFile="bin\debug\FakeTask.dll"/>
+    <PropertyGroup>
+        <includeDebugInformation>true</includeDebugInformation>
+        <debuggingType>full</debuggingType>
+        <builtdir>bin\debug\</builtdir>
+    </PropertyGroup>
+    <ItemGroup Label="CSSources">
+        <CSFile Include="tester.cs" />
+        <CSFile Include="Assemblyinfo.cs" />
+    </ItemGroup>
+    <ItemGroup Label="References">
+        <Reference Include="System" />
+        <Reference Include="System.Data" />
+    </ItemGroup>
+    <!--
+    debugType= full|pdbonly<
+    TargetType=library|exe|moduie|winexe
+    -->
+    <Target Name="Compile" DependsOnTargets="Resources">
+        <Csc1
+            Sources="@(CSFile)"
+            TargetType="library"
+            Resources="@(CompiledResources)"
+            EmitDebugInformation="$(includeDebugInformation)"
+            References="@(Reference)"
+            DebugType="$(debuggingType)"
+            OutputAssembly="$(builtdir)\$(MSBuildProjectName).dll" >
+                <Output 
+                    TaskParameter="OutputAssembly"
+                    ItemName="FinalAssemblyName" />
+                <Output 
+                    TaskParameter="BuildSucceeded"
+                    PropertyName="BuildWorked" />
+        </Csc1>
+    </Target>
+    <Target Name="Resources"/>
+</Project>
