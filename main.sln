@@ -24,6 +24,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "read_meta", "read_meta\read
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "example", "example.csproj", "{5D1210D5-8A0C-421D-AB41-A47140721E40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeTask", "projects\FakeTask\FakeTask.csproj", "{5132BBA4-30A5-485F-9A56-79C717E6EF4D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{EB89F0DC-6749-4E62-ACA9-4D98D257FA9B}"
+	ProjectSection(SolutionItems) = preProject
+		MSBuild\Colt.MSBuild.tasks = MSBuild\Colt.MSBuild.tasks
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -58,6 +65,10 @@ Global
 		{5D1210D5-8A0C-421D-AB41-A47140721E40}.Debug|x86.Build.0 = Debug|x86
 		{5D1210D5-8A0C-421D-AB41-A47140721E40}.Release|x86.ActiveCfg = Debug|x86
 		{5D1210D5-8A0C-421D-AB41-A47140721E40}.Release|x86.Build.0 = Debug|x86
+		{5132BBA4-30A5-485F-9A56-79C717E6EF4D}.Debug|x86.ActiveCfg = Debug|x86
+		{5132BBA4-30A5-485F-9A56-79C717E6EF4D}.Debug|x86.Build.0 = Debug|x86
+		{5132BBA4-30A5-485F-9A56-79C717E6EF4D}.Release|x86.ActiveCfg = Release|x86
+		{5132BBA4-30A5-485F-9A56-79C717E6EF4D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,15 +3,28 @@
     <UsingTask TaskName="NSNugetTask.GenerateNugetSpec"
         AssemblyFile="bin\debug\NugetTask.dll"/>
 
+    <PropertyGroup>
+        <asmPath>test.dll</asmPath>
+        <specPath>.</specPath>
+    </PropertyGroup>
+    
     <Target Name="MyTarget">
-        <GenerateNugetSpec MyProperty="Hello!">
-            <Output TaskParameter="singleResult"
-				PropertyName="singleResultItem" />
-            <Output TaskParameter="results"
-				ItemName="resultsItemName" />
+        <GenerateNugetSpec 
+            AssemblyPath="$(asmPath)"
+            NuspecPath="$(specPath)"
+            >
+            <Output 
+                TaskParameter="BuildResult"
+				PropertyName="specBuildResult" />
+            <Output 
+                TaskParameter="NuspecResult"
+				PropertyName="specResult" />
+            
+            <Output TaskParameter="NuspecData"
+				ItemName="outputData" />
         </GenerateNugetSpec>
-        <Message Importance="High" Text="found-1 $(singleResultItem)."/>
-        <Message Importance="High" Text="found-2 %(itemname.resultsItemName)."/>
-        <Message Importance="High" Text="found-3 %(resultsItemName.identity)."/>
+        <Message Importance="High" Text="BuildResult  = $(specBuildResult)."/>
+        <Message Importance="High" Text="NuspecResult = $(specResult)."/>
+        <!--<Message Importance="High" Text="NuspecData1   = %(outputData.identity)."/>-->
     </Target>
 </Project>

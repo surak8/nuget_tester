@@ -1,0 +1,6 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <UsingTask TaskName="NSFake.Csc1"
+        AssemblyFile="FakeTask.dll"/>
+    <UsingTask TaskName="NSNugetTask.GenerateNugetSpec"
+        AssemblyFile="NugetTask.dll"/>
+</Project>

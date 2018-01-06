@@ -42,7 +42,6 @@ namespace NSNugetTask {
 
         #endregion
 
-
         //public string ItemSpec {
         //    get {
         //        string ret = string.IsNullOrEmpty(_itemSpec) ? "NULL_ITEMSPEC" : _itemSpec;
@@ -124,17 +123,15 @@ namespace NSNugetTask {
         //        _map.Add(metadataName, metadataValue);
         //}
 
-
-
         #region ITaskItem implementation
 
         #region ITaskItem properties
         string ITaskItem.ItemSpec {
             get {
-                if (string.IsNullOrEmpty (_itemSpec))
-                    MiniLogger.log(MethodBase.GetCurrentMethod(),"UGH, it's NULL!");
+                if (string.IsNullOrEmpty(_itemSpec))
+                    MiniLogger.log(MethodBase.GetCurrentMethod(), "UGH, it's NULL!");
                 if (verbose)
-                    MiniLogger.log(MethodBase.GetCurrentMethod(),"returning: "+_itemSpec);
+                    MiniLogger.log(MethodBase.GetCurrentMethod(), "returning: " + _itemSpec);
                 return _itemSpec;
             }
             set {
@@ -182,13 +179,10 @@ namespace NSNugetTask {
         }
 
         void ITaskItem.SetMetadata(string metadataName, string metadataValue) {
-            //if (verbose)
-            //    MiniLogger.log(MethodBase.GetCurrentMethod(), "{0}={1}", new object[] { metadataName, metadataValue });
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod(),
                     "{0}={1}",
                     new object[] { metadataName, metadataValue });
-            //"[," + metadataName + "] = " + metadataValue);
             if (_map.ContainsKey(metadataName))
                 _map[metadataName] = metadataValue;
             else
@@ -210,12 +204,14 @@ namespace NSNugetTask {
         IDictionary ITaskItem.CloneCustomMetadata() {
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod(), "{0}={1}");
-            //if (verbose)
-            //    MiniLogger.log(MethodBase.GetCurrentMethod());
             return new MyDictionary(_map);
         }
         #endregion ITaskItem methods
 
         #endregion ITaskItem implementation
+
+        public override string ToString() {
+            return "TOSTRING="+base.ToString();
+        }
     }
 }
