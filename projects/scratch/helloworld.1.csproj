@@ -1,0 +1,14 @@
+<!-- https://msdn.microsoft.com/en-us/library/dd576348.aspx -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <AssemblyName>MSBuildSample</AssemblyName>
+        <OutputPath>Bin\</OutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="helloworld.cs" />
+    </ItemGroup>
+    <Target Name="Build">
+        <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+        <Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
+    </Target>
+</Project>

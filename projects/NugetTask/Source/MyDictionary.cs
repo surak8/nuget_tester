@@ -147,6 +147,7 @@ namespace NSNugetTask {
         }
 
         IDictionaryEnumerator IDictionary.GetEnumerator() {
+            if (verbose)
             MiniLogger.log(MethodBase.GetCurrentMethod());
             return new MyDictEnum(_map);
         }
