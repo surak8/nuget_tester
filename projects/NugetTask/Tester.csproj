@@ -7,24 +7,70 @@
         <asmPath>test.dll</asmPath>
         <specPath>.</specPath>
     </PropertyGroup>
-    
-    <Target Name="MyTarget">
-        <GenerateNugetSpec 
+    <ItemGroup>
+        <NuPkgDepend Include="asm1">
+            <Version>1.0.0.0</Version>
+        </NuPkgDepend>
+        <NuPkgDepend Include="asm2">
+            <Version>1.0.1.0</Version>
+        </NuPkgDepend>
+        <NuFileInclude Include="test.txt"/>
+        <NuFileInclude Include="test.xml"/>
+        <NuFileInclude Include="test.pdb"/>
+    </ItemGroup>
+
+    <Target Name="MyTarget" >
+    <!--<Target Name="MyTarget" DependsOnTargets="ExampleTarget;AtSymbol">-->
+        <GenerateNugetSpec
             AssemblyPath="$(asmPath)"
             NuspecPath="$(specPath)"
+            PackageDepends="@(NuPkgDepend)"
+            PackageFiles="@(NuFileInclude)"
             >
-            <Output 
+            <Output
                 TaskParameter="BuildResult"
 				PropertyName="specBuildResult" />
-            <Output 
+            <Output
                 TaskParameter="NuspecResult"
 				PropertyName="specResult" />
-            
+
             <Output TaskParameter="NuspecData"
 				ItemName="outputData" />
         </GenerateNugetSpec>
         <Message Importance="High" Text="BuildResult  = $(specBuildResult)."/>
         <Message Importance="High" Text="NuspecResult = $(specResult)."/>
+        <!--<Message Importance="High" Text="ID-1=@(outputData.id)."/>-->
+        <Message Importance="High" Text="ID      = %(outputData.id)."/>
+        <Message Importance="High" Text="VERSION = %(outputData.version)."/>
+        <!--<Message Importance="High" Text="stuff=@(outputData)."/>-->
         <!--<Message Importance="High" Text="NuspecData1   = %(outputData.identity)."/>-->
+    </Target>
+
+    <!--http://rationalgeek.com/blog/msbuild-propertygroup-itemgroup-item-metadata-and-crazy-syntax/-->
+
+    <Target Name="ExampleTarget">
+        <ItemGroup>
+            <People Include="Joe">
+                <Email>joe@example.com</Email>
+            </People>
+            <People Include="Bill">
+                <Email>bill@example.com</Email>
+            </People>
+            <People Include="Oscar">
+                <Email>oscar@example.com</Email>
+            </People>
+        </ItemGroup>
+        <Message Text="Processing person %(People.Identity) with email %(People.Email)"/>
+
+    </Target>
+    <Target Name="AtSymbol">
+        <ItemGroup>
+            <MyItems Include="First" />
+            <MyItems Include="Second;Third;" />
+            <MyItems Include=";;;;Fourth;;" />
+        </ItemGroup>
+        <Message Text="My items using dollar: $(MyItems)"/>
+        <Message Text="My items using at symbol: @(MyItems)"/>
+
     </Target>
 </Project>

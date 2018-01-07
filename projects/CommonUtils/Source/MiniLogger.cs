@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -25,8 +26,8 @@ namespace NSCommon.Logging {
             log(makeSig(mb) + ":" + msg);
         }
 
-        public static void log(MethodBase mb,string fmt,params object[] args) {
-            log(makeSig(mb)+":"+string.Format(fmt,args));
+        public static void log(MethodBase mb, string fmt, params object[] args) {
+            log(makeSig(mb) + ":" + string.Format(fmt, args));
         }
 
         public static void log(MethodBase mb) {
@@ -40,8 +41,34 @@ namespace NSCommon.Logging {
 #endif
         }
 
+        static readonly IDictionary<MethodBase, string> sigMap = new Dictionary<MethodBase, string>();
+
         public static string makeSig(MethodBase mb) {
-            return mb.ReflectedType.Name + "." + mb.Name;
+            StringBuilder sb;
+            ParameterInfo [] pi;
+            int nargs;
+
+            if (!sigMap .ContainsKey(mb)) {
+                sb = new StringBuilder();
+                sb.Append(mb.ReflectedType.Name);
+                if (!(string.Compare(mb.Name, ConstructorInfo.ConstructorName, true) == 0 &&
+                string.Compare(mb.Name, ConstructorInfo.TypeConstructorName, true) == 0))
+                    sb.Append(".");
+                sb.Append(mb.Name);
+                sb.Append("(");
+                pi = mb.GetParameters();
+                if ((nargs=pi.Length) > 0) {
+                    for (int i=0 ;i<nargs ; i++) {
+                        if (i > 0)
+                            sb.Append(", ");
+                        sb.Append(pi[i].ParameterType.Name);
+                    }
+                }
+                sb.Append(")");
+                sigMap.Add(mb, sb.ToString());
+            }
+            return sigMap[mb];
+
         }
     }
 }

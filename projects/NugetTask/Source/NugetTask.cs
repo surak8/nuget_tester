@@ -1,5 +1,8 @@
+
 //  https://msdn.microsoft.com/en-us/library/t9883dzc.aspx
 // http://blog.differentpla.net/blog/2013/02/01/msbuild-tasks-input-parameters-and-itemgroups
+#define USE_TEST_TASK_ITEM
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,15 +17,18 @@ namespace NSNugetTask {
     public class GenerateNugetSpec : ITask {
         #region fields
         public static bool verbose = false;
+        static XmlWriterSettings _settings;
+
+        readonly List<ITaskItem> _data = new List<ITaskItem>();
+        readonly List<ITaskItem> _depends = new List<ITaskItem>();
+        readonly List<ITaskItem> _files = new List<ITaskItem>();
         ITaskHost _ith;
         IBuildEngine _ibe;
+        ITaskItem _outputpath;
+        bool _result;
         string _asmPath;
         string _specPath;
-        ITaskItem _outputpath;
-        readonly List<ITaskItem> _data = new List<ITaskItem>();
-        bool _result;
         #endregion
-        static XmlWriterSettings _settings;
 
         #region ctor
         public GenerateNugetSpec() {
@@ -52,11 +58,24 @@ namespace NSNugetTask {
         [Output]
         public ITaskItem[] NuspecData { get { return _data.ToArray(); } }
 
-        #endregion
+        public ITaskItem[] PackageDepends {
+            set {
+                _depends.Clear();
+                if (value != null)
+                    _depends.AddRange(value);
+            }
+        }
+
+        public ITaskItem[] PackageFiles {
+            set {
+                _files.Clear();
+                if (value != null)
+                    _files.AddRange(value);
+            }
+        }
 
         static XmlWriterSettings settings {
             get {
-
                 if (_settings == null) {
                     _settings = new XmlWriterSettings();
                     _settings.Encoding = System.Text.Encoding.ASCII;
@@ -67,9 +86,11 @@ namespace NSNugetTask {
                 return _settings;
             }
         }
+        #endregion
 
         #region ITask implementation
 
+        #region ITask properties
         IBuildEngine ITask.BuildEngine {
             get {
                 if (verbose)
@@ -96,15 +117,14 @@ namespace NSNugetTask {
             }
         }
 
+        #endregion ITask properties
+
+        #region ITask methods
         bool ITask.Execute() {
             string outFile;
             FileVersionInfo fvi;
             List<ITaskItem> content;
 
-            verbose = true;
-            TestTaskItem.verbose = true;
-            MyDictEnum.verbose = true;
-            MyDictionary.verbose = true;
 
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod());
@@ -117,24 +137,15 @@ namespace NSNugetTask {
                       Path.GetFileNameWithoutExtension(AssemblyPath) + ".nuspec"));
                     showMessage("OUTFILE=" + outFile);
                     if (generateSpecfile(outFile, fvi, out content, AssemblyPath)) {
-                        // successful
-                        // poulate the metadata!.
-                        // BuildResult (bool) 
-                        // NuspecResult (file-path)
-                        // NuspecData (metadata collection of contents
                         try {
-#if false
+#if USE_TEST_TASK_ITEM
                             _outputpath = new TestTaskItem(outFile);
 #else
                             _outputpath = new TaskItem(outFile);
-                            //                        if (_outputpath.MetadataNames.con)
-                            //_outputpath.RemoveMetadata("FullPath");
 #endif
-                            _outputpath.SetMetadata("FullPath1", outFile);
-                            _outputpath.SetMetadata("FileName1", Path.GetFileName(outFile));
                             _result = true;
-                            _data.Clear();
-                            _data.AddRange(content);
+                            populateData("NuspecData", content);
+                 
                         } catch (ArgumentException ae) {
                             showError(ae.Message);
 
@@ -153,9 +164,29 @@ namespace NSNugetTask {
             }
             return BuildResult;
         }
+        #endregion ITask methods
+        #endregion
+
+
+        #region methods
+        void populateData(string elementName, List<ITaskItem> content) {
+            ITaskItem ti;
+            string key;
+
+#if USE_TEST_TASK_ITEM
+            ti = new TestTaskItem(elementName);
+#else
+            ti = new TaskItem(elementName);
+#endif
+            foreach (ITaskItem iti in content) {
+                key = iti.ItemSpec;
+                ti.SetMetadata(key, iti.GetMetadata(key));
+            }
+            _data.Clear();
+            _data.Add(ti);
+        }
 
         void showError(string v) {
-            //BuildEngine be = (ITask) this.BuildEngine;
             int line, col;
             string file;
 
@@ -174,30 +205,9 @@ namespace NSNugetTask {
 
         bool generateSpecfile(string fname, FileVersionInfo fvi, out List<ITaskItem> content, string inPath) {
             bool ret = true;
-            content = new List<ITaskItem>();
-            /*
-  <package >
-    <metadata>
-      <id>test</id>
-      <version>1.0.3</version>
-      <authors>Colt Manufacturing LLC.</authors>
-      <owners>Colt Manufacturing LLC.</owners>
-      <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-      <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-      <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
-      <requireLicenseAcceptance>false</requireLicenseAcceptance>
-      <description>description of tmp.</description>
-      <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
-      <copyright>Copyright 2018</copyright>
-      <tags>Tag1 Tag2</tags>
-      <dependencies>
-        <dependency id="SampleDependency" version="1.0" />
-      </dependencies>
-    </metadata>
-  </packag                     */
-
             string versionValue, idValue, authorsValue, descValue, copyrightValue, ownerValue;
 
+            content = new List<ITaskItem>();
             versionValue = fvi.ProductVersion;
             versionValue = new Version(fvi.ProductMajorPart, fvi.ProductMinorPart, fvi.ProductBuildPart).ToString();
             idValue = fvi.ProductName;
@@ -220,7 +230,6 @@ namespace NSNugetTask {
                     xw.WriteStartDocument();
 
                     xw.WriteStartElement("package");
-                    //writeNode(xw,"metadata")
                     xw.WriteStartElement("metadata");
                     xw.WriteElementString("id", idValue);
                     xw.WriteElementString("version", versionValue);
@@ -228,9 +237,9 @@ namespace NSNugetTask {
                     xw.WriteElementString("owners", fvi.CompanyName);
                     xw.WriteElementString("description", descValue);
                     xw.WriteElementString("copyright", copyrightValue);
-                    addDependencies(xw);
+                    addDependencies(xw, this._depends.ToArray());
                     xw.WriteEndElement();
-                    xw.WriteEndElement();
+
                     addFiles(xw, new ITaskItem[] { iti });
 
                     xw.WriteEndDocument();
@@ -273,17 +282,25 @@ namespace NSNugetTask {
             xw.WriteEndElement();
         }
 
-        void addDependencies(XmlWriter xw) {
+        void addDependencies(XmlWriter xw, ITaskItem[] deps) {
             xw.WriteStartElement("dependencies");
-            xw.WriteStartElement("dependency");
-            xw.WriteAttributeString("id", "some_name");
-            xw.WriteAttributeString("version", "1.0.0");
+            if (deps != null)
+                foreach (ITaskItem idep in deps)
+                    addDependency(xw, idep);
             xw.WriteEndElement();
         }
 
-        #endregion
+        void addDependency(XmlWriter xw, ITaskItem idep) {
+            xw.WriteStartElement("dependency");
+            xw.WriteAttributeString("id", idep.ItemSpec);
+            xw.WriteAttributeString("version", idep.GetMetadata("Version"));
+            xw.WriteEndElement();
+        }
+
         void showMessage(string message) {
             ((ITask) this).BuildEngine.LogMessageEvent(new BuildMessageEventArgs(message, "keyword", "sender", MessageImportance.High, DateTime.Now));
         }
+
+        #endregion
     }
 }

@@ -202,9 +202,11 @@ namespace NSNugetTask {
         }
 
         IDictionary ITaskItem.CloneCustomMetadata() {
+            IDictionary ret;
             if (verbose)
-                MiniLogger.log(MethodBase.GetCurrentMethod(), "{0}={1}");
-            return new MyDictionary(_map);
+                MiniLogger.log(MethodBase.GetCurrentMethod() );
+            ret=new MyDictionary(_map);
+            return ret;
         }
         #endregion ITaskItem methods
 
