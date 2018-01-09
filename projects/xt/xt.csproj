@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\debug\</OutputPath>
+    <OutputPath>..\..\MSBuild\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\debug\xt.XML</DocumentationFile>
+    <DocumentationFile>..\..\MSBuild\xt.XML</DocumentationFile>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+        <ProductVersion>8.0.30703</ProductVersion>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{3717F14D-2D4F-4589-BCDE-30C191AB76A8}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>NSTest</RootNamespace>
+        <AssemblyName>test</AssemblyName>
+        <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <TargetFrameworkProfile />
+        <FileUpgradeFlags>
+        </FileUpgradeFlags>
+        <UpgradeBackupLocation>
+        </UpgradeBackupLocation>
+        <OldToolsVersion>2.0</OldToolsVersion>
+        <PublishUrl>publish\</PublishUrl>
+        <Install>true</Install>
+        <InstallFrom>Disk</InstallFrom>
+        <UpdateEnabled>false</UpdateEnabled>
+        <UpdateMode>Foreground</UpdateMode>
+        <UpdateInterval>7</UpdateInterval>
+        <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+        <UpdatePeriodically>false</UpdatePeriodically>
+        <UpdateRequired>false</UpdateRequired>
+        <MapFileExtensions>true</MapFileExtensions>
+        <ApplicationRevision>0</ApplicationRevision>
+        <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+        <IsWebBootstrapper>false</IsWebBootstrapper>
+        <UseApplicationTrust>false</UseApplicationTrust>
+        <BootstrapperEnabled>true</BootstrapperEnabled>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <DocumentationFile>bin\debug\test.XML</DocumentationFile>
+        <UseVSHostingProcess>false</UseVSHostingProcess>
+        <NoWarn>1591</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugType>none</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <DocumentationFile>bin\release\test.XML</DocumentationFile>
+        <UseVSHostingProcess>false</UseVSHostingProcess>
+        <NoWarn>1591</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup>
+        <StartupObject />
+    </PropertyGroup>
+    <ItemGroup Label="References">
+        <Reference Include="System" />
+        <Reference Include="System.Data" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="test.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+            <Visible>False</Visible>
+            <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+            <Install>true</Install>
+        </BootstrapperPackage>
+        <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+            <Visible>False</Visible>
+            <ProductName>.NET Framework 3.5 SP1</ProductName>
+            <Install>false</Install>
+        </BootstrapperPackage>
+        <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+            <Visible>False</Visible>
+            <ProductName>Windows Installer 4.5</ProductName>
+            <Install>true</Install>
+        </BootstrapperPackage>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <UsingTask TaskName="NSNugetTask.GenerateNugetSpec"
+        AssemblyFile="C:\Users\Owner\source\nuget\MSBuild\NugetTask.dll"/>
+
+
+    <Target Name="AfterBuild" Inputs="$(TargetPath)">
+        <Message Text="in AfterBuild"
+    </Target>
+
+    <Target Name="dummy" Inputs="$(TargetPath)">
+        <Message Importance="high" Text="TargetPath=$(TargetPath)" />
+
+        <!--<ItemGroup>
+			<MyProjPath Include="$(MSBuildProjectFullPath)"/>
+		</ItemGroup>
+
+        <Message Importance="High" Text="MyProjName  = $(MyProjName)"/>
+        <Message Importance="High" Text="MyProjPath  = @(MyProjPath)"/>-->
+        <!--
+        MSBuildProjectFullPath path
+        -->
+        <GenerateNugetSpec
+            AssemblyPath="$(TargetPath)"
+            NuspecPath="$(MSBuildProjectFullPath)"
+            PackageDepends="@(NuPkgDepend)"
+            PackageFiles="@(NuFileInclude)"
+            >
+            <Output
+                TaskParameter="BuildResult"
+				PropertyName="specBuildResult" />
+            <Output
+                TaskParameter="NuspecResult"
+				PropertyName="specResult" />
+
+            <Output TaskParameter="NuspecData"
+				ItemName="outputData" />
+            <Output TaskParameter="NuspecPackage"
+                ItemName="pkg" />
+        </GenerateNugetSpec>
+        <!--<Message Importance="High" Text="BuildResult  = $(specBuildResult)"/>
+        <Message Importance="High" Text="NuspecResult (output spec-file)= $(specResult)"/>
+        <Message Importance="High" Text="ID      = %(outputData.id)"/>
+        <Message Importance="High" Text="VERSION = %(outputData.version)"/>-->
+        <Exec Command="nuget pack $(specResult) -verbosity detailed" >
+            <Output
+                TaskParameter="ExitCode"
+				PropertyName="ngExitCode" />
+            <Output
+                TaskParameter="Outputs"
+				PropertyName="ngOutputs" />
+        </Exec>
+        <Message Importance="high" Text="ExitCode=$(ngExitCode)"/>
+        <!--<Message Importance="high" Text="ExitCode=$(ngExitCode)"/>-->
+        <!--<Message Importance="high" Text="Outputs=@(ngOutputs)"/>-->
+        <Exec Command="nuget push @(pkg) -verbosity detailed" >
+            <Output
+                TaskParameter="ExitCode"
+				PropertyName="ngExitCode" />
+            <Output
+                TaskParameter="Outputs"
+				PropertyName="ngOutputs" />
+        </Exec>
+        <Message Importance="high" Text="ExitCode=$(ngExitCode)"/>
+    </Target>
+</Project>
+<!-- nuget pack C:\Users\Owner\AppData\Local\Temp\test.nuspec -verbosity detailed  -->

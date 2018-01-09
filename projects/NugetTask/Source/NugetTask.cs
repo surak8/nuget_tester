@@ -29,6 +29,7 @@ namespace NSNugetTask {
         string _asmPath;
         string _specPath;
         #endregion
+        ITaskItem _pkg;
 
         #region ctor
         public GenerateNugetSpec() {
@@ -88,6 +89,9 @@ namespace NSNugetTask {
         }
         #endregion
 
+        [Output]
+        public ITaskItem NuspecPackage { get { return _pkg; } }
+
         #region ITask implementation
 
         #region ITask properties
@@ -121,22 +125,47 @@ namespace NSNugetTask {
 
         #region ITask methods
         bool ITask.Execute() {
-            string outFile;
+            string outFile, outSpecPath, dir = null;
             FileVersionInfo fvi;
             List<ITaskItem> content;
 
-
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod());
-            ((ITask) this).BuildEngine.LogMessageEvent(new BuildMessageEventArgs("in Execute", null, GetType().FullName, MessageImportance.Low));
+            if (string.IsNullOrEmpty(NuspecPath)) {
+                showError("Property 'NuspecPath' is null!");
+                return false;
+            }
+            outSpecPath = Path.GetDirectoryName(Path.GetFullPath(NuspecPath));
+            showMessage("NuspecPath=" + outSpecPath);
+            try {
+                dir = Path.GetDirectoryName(outSpecPath);
+                showMessage("Check NuspecPath=" + dir);
+                if (!Directory.Exists(dir)) {
+                    Directory.CreateDirectory(dir);
+                    showMessage("Creating NuspecPath-dir =" + dir);
+                }
+            } catch (Exception ex) {
+                showError("error creating directory '" + dir + "'" + Environment.NewLine + MiniLogger.decompose(ex));
+                return false;
+            }
+            showMessage(MessageImportance.Low, "spec-path: " + outSpecPath);
+
+            //((ITask) this).BuildEngine.LogMessageEvent(new BuildMessageEventArgs("in Execute", null, GetType().FullName, MessageImportance.Low));
             if (!string.IsNullOrEmpty(AssemblyPath)) {
                 if (File.Exists(AssemblyPath)) {
                     fvi = FileVersionInfo.GetVersionInfo(AssemblyPath);
+#if true
+                    outFile = Path.GetFullPath(
+                        Path.Combine(
+                            outSpecPath,
+                            Path.GetFileNameWithoutExtension(AssemblyPath) + ".nuspec"));
+#else
                     outFile = Path.GetFullPath(Path.Combine(
                       Path.GetDirectoryName(AssemblyPath),
                       Path.GetFileNameWithoutExtension(AssemblyPath) + ".nuspec"));
+#endif
                     showMessage("OUTFILE=" + outFile);
-                    if (generateSpecfile(outFile, fvi, out content, AssemblyPath)) {
+                    if (generateSpecfile(outFile, fvi, AssemblyPath, out _pkg, out content)) {
                         try {
 #if USE_TEST_TASK_ITEM
                             _outputpath = new TestTaskItem(outFile);
@@ -145,7 +174,7 @@ namespace NSNugetTask {
 #endif
                             _result = true;
                             populateData("NuspecData", content);
-                 
+
                         } catch (ArgumentException ae) {
                             showError(ae.Message);
 
@@ -155,8 +184,9 @@ namespace NSNugetTask {
                     }
                     Trace.WriteLine("here");
                 } else {
-                    ((ITask) this).BuildEngine.LogErrorEvent(
-                        new BuildErrorEventArgs("subcat", "code", "file", -1, -1, -1, -1, "not exist", "help", "sender", System.DateTime.Now));
+                    this.showError(AssemblyPath + " does not exist in " + Directory.GetCurrentDirectory());
+                    //((ITask) this).BuildEngine.LogErrorEvent(
+                    //    new BuildErrorEventArgs("subcat", "code", "file", -1, -1, -1, -1, AssemblyPath+" does not exist in "+Directory.GetCurrentDirectory(), "help", "sender", System.DateTime.Now));
                 }
             } else {
                 ((ITask) this).BuildEngine.LogErrorEvent(
@@ -164,15 +194,18 @@ namespace NSNugetTask {
             }
             return BuildResult;
         }
+
         #endregion ITask methods
         #endregion
-
 
         #region methods
         void populateData(string elementName, List<ITaskItem> content) {
             ITaskItem ti;
             string key;
 
+            //if (!string.IsNullOrEmpty(specPath)) {
+            //    Trace.Write("here");
+            //}
 #if USE_TEST_TASK_ITEM
             ti = new TestTaskItem(elementName);
 #else
@@ -203,9 +236,9 @@ namespace NSNugetTask {
                     v, "help", "sender", DateTime.Now));
         }
 
-        bool generateSpecfile(string fname, FileVersionInfo fvi, out List<ITaskItem> content, string inPath) {
+        bool generateSpecfile(string fname, FileVersionInfo fvi, string inPath, out ITaskItem pkg, out List<ITaskItem> content) {
             bool ret = true;
-            string versionValue, idValue, authorsValue, descValue, copyrightValue, ownerValue;
+            string versionValue, idValue, authorsValue, descValue, copyrightValue, ownerValue,pkgValue;
 
             content = new List<ITaskItem>();
             versionValue = fvi.ProductVersion;
@@ -216,6 +249,18 @@ namespace NSNugetTask {
             authorsValue = "blah";
             descValue = fvi.Comments;
             ownerValue = fvi.CompanyName;
+            pkgValue = Path.Combine(inPath, idValue + versionValue + ".nupkg");
+            pkgValue = Path.Combine(
+                Path.GetDirectoryName (fname), 
+                idValue + "." + versionValue + ".nupkg");
+
+            //Microsoft.Build.
+            var logctx=((ITask) this).BuildEngine.
+#if USE_TEST_TASK_ITEM
+            pkg = new TestTaskItem(pkgValue);
+#else
+            pkg = new TaskItem(pkgValue);
+#endif
             content.AddRange(new ITaskItem[] {
                 makeTaskItem("id",idValue),
                 makeTaskItem("version",versionValue),
@@ -298,9 +343,12 @@ namespace NSNugetTask {
         }
 
         void showMessage(string message) {
-            ((ITask) this).BuildEngine.LogMessageEvent(new BuildMessageEventArgs(message, "keyword", "sender", MessageImportance.High, DateTime.Now));
+            showMessage(MessageImportance.High, message);
         }
 
-        #endregion
+        void showMessage(MessageImportance mi, string message) {
+            ((ITask) this).BuildEngine.LogMessageEvent(new BuildMessageEventArgs(message, "keyword", "sender", mi, DateTime.Now));
+        }
+#endregion
     }
 }

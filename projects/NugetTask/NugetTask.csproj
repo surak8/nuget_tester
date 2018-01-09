@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\debug\</OutputPath>
+    <OutputPath>..\..\MSBuild\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\debug\NugetTask.XML</DocumentationFile>
+    <DocumentationFile>..\..\MSBuild\NugetTask.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -61,7 +61,9 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tester.csproj" />
+    <None Include="Tester.csproj">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtils\CommonUtils.csproj">

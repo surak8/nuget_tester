@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <UsingTask TaskName="NSNugetTask.GenerateNugetSpec"
-        AssemblyFile="bin\debug\NugetTask.dll"/>
+        AssemblyFile="C:\Users\Owner\source\nuget\MSBuild\NugetTask.dll"/>
 
     <PropertyGroup>
         <asmPath>test.dll</asmPath>
@@ -36,9 +36,14 @@
 
             <Output TaskParameter="NuspecData"
 				ItemName="outputData" />
+            <Output TaskParameter="NuspecPackage"
+				ItemName="pkg" />
+
+            
         </GenerateNugetSpec>
         <Message Importance="High" Text="BuildResult  = $(specBuildResult)."/>
         <Message Importance="High" Text="NuspecResult = $(specResult)."/>
+        <Message Importance="High" Text="NuspecPackage = @(pkg)."/>
         <!--<Message Importance="High" Text="ID-1=@(outputData.id)."/>-->
         <Message Importance="High" Text="ID      = %(outputData.id)."/>
         <Message Importance="High" Text="VERSION = %(outputData.version)."/>
