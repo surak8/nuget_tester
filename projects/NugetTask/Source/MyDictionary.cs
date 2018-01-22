@@ -6,11 +6,13 @@ using NSCommon.Logging;
 
 namespace NSNugetTask {
     public class MyDictionary : IDictionary {
+        #region fields
         public static bool verbose = false;
-
         IDictionary<string, string> _map = new Dictionary<string, string>();
         readonly object _lock = new object();
+        #endregion
 
+        #region ctor
         public MyDictionary(IDictionary<string, string> amap) {
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod());
@@ -20,6 +22,7 @@ namespace NSNugetTask {
                     _map.Add(aKey, amap[aKey]);
             }
         }
+        #endregion
 
         object IDictionary.this[object key] {
             get {
@@ -171,7 +174,6 @@ namespace NSNugetTask {
 
 
         internal MyDictEnum(IDictionary<string, string> aMap) {
-            //_nindex = _nitems = -1;
             if (verbose)
                 MiniLogger.log(MethodBase.GetCurrentMethod());
             _map = aMap;
@@ -193,8 +195,6 @@ namespace NSNugetTask {
                     MiniLogger.log(MethodBase.GetCurrentMethod());
                 aKey = _keys[_nindex];
                 return new DictionaryEntry(aKey, _map[aKey]);
-                //return _map[_keys[_nindex]];
-                //throw new NotImplementedException();
             }
         }
 
@@ -231,13 +231,10 @@ namespace NSNugetTask {
                 MiniLogger.log(MethodBase.GetCurrentMethod(),
                     "returning: " + ret +
                     " [ITEMS=" + _nindex + ", INDEX=" + _nindex + "]");
-            //        );
-            //return _nitems < 0 ? false : (_nindex++ > _nitems);
             return ret;
         }
 
         void IEnumerator.Reset() {
-            //_nitems = _map == null ? 0 : _map.Count;
             _nitems = _map.Count;
             _nindex = -1;
 
@@ -245,7 +242,6 @@ namespace NSNugetTask {
                 MiniLogger.log(
                     MethodBase.GetCurrentMethod(),
                     "ITEMS=" + _nitems + ", INDEX=" + _nindex);
-            //);
         }
     }
 }

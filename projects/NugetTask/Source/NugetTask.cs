@@ -25,11 +25,11 @@ namespace NSNugetTask {
         ITaskHost _ith;
         IBuildEngine _ibe;
         ITaskItem _outputpath;
+        ITaskItem _pkg;
         bool _result;
         string _asmPath;
         string _specPath;
         #endregion
-        ITaskItem _pkg;
 
         #region ctor
         public GenerateNugetSpec() {
@@ -38,6 +38,7 @@ namespace NSNugetTask {
         #endregion
 
         #region properties
+        #region required input properties
         [Required]
         public string AssemblyPath {
             get { return _asmPath; }
@@ -49,7 +50,9 @@ namespace NSNugetTask {
             get { return _specPath; }
             set { _specPath = value; }
         }
+        #endregion
 
+        #region output properties
         [Output]
         public bool BuildResult { get { return _result; } }
 
@@ -58,6 +61,10 @@ namespace NSNugetTask {
 
         [Output]
         public ITaskItem[] NuspecData { get { return _data.ToArray(); } }
+
+        [Output]
+        public ITaskItem NuspecPackage { get { return _pkg; } }
+        #endregion
 
         public ITaskItem[] PackageDepends {
             set {
@@ -89,8 +96,6 @@ namespace NSNugetTask {
         }
         #endregion
 
-        [Output]
-        public ITaskItem NuspecPackage { get { return _pkg; } }
 
         #region ITask implementation
 
@@ -150,7 +155,6 @@ namespace NSNugetTask {
             }
             showMessage(MessageImportance.Low, "spec-path: " + outSpecPath);
 
-            //((ITask) this).BuildEngine.LogMessageEvent(new BuildMessageEventArgs("in Execute", null, GetType().FullName, MessageImportance.Low));
             if (!string.IsNullOrEmpty(AssemblyPath)) {
                 if (File.Exists(AssemblyPath)) {
                     fvi = FileVersionInfo.GetVersionInfo(AssemblyPath);
@@ -185,8 +189,6 @@ namespace NSNugetTask {
                     Trace.WriteLine("here");
                 } else {
                     this.showError(AssemblyPath + " does not exist in " + Directory.GetCurrentDirectory());
-                    //((ITask) this).BuildEngine.LogErrorEvent(
-                    //    new BuildErrorEventArgs("subcat", "code", "file", -1, -1, -1, -1, AssemblyPath+" does not exist in "+Directory.GetCurrentDirectory(), "help", "sender", System.DateTime.Now));
                 }
             } else {
                 ((ITask) this).BuildEngine.LogErrorEvent(
@@ -203,9 +205,6 @@ namespace NSNugetTask {
             ITaskItem ti;
             string key;
 
-            //if (!string.IsNullOrEmpty(specPath)) {
-            //    Trace.Write("here");
-            //}
 #if USE_TEST_TASK_ITEM
             ti = new TestTaskItem(elementName);
 #else
@@ -236,10 +235,11 @@ namespace NSNugetTask {
                     v, "help", "sender", DateTime.Now));
         }
 
-        bool generateSpecfile(string fname, FileVersionInfo fvi, string inPath, out ITaskItem pkg, out List<ITaskItem> content) {
+        bool generateSpecfile(string fname, FileVersionInfo fvi, string inPath, out ITaskItem pkg1, out List<ITaskItem> content) {
             bool ret = true;
             string versionValue, idValue, authorsValue, descValue, copyrightValue, ownerValue,pkgValue;
 
+            pkg1 = null;
             content = new List<ITaskItem>();
             versionValue = fvi.ProductVersion;
             versionValue = new Version(fvi.ProductMajorPart, fvi.ProductMinorPart, fvi.ProductBuildPart).ToString();
@@ -254,12 +254,10 @@ namespace NSNugetTask {
                 Path.GetDirectoryName (fname), 
                 idValue + "." + versionValue + ".nupkg");
 
-            //Microsoft.Build.
-            var logctx=((ITask) this).BuildEngine.
 #if USE_TEST_TASK_ITEM
-            pkg = new TestTaskItem(pkgValue);
+           pkg1 = new TestTaskItem(pkgValue);
 #else
-            pkg = new TaskItem(pkgValue);
+            pkg1 = new TaskItem(pkgValue);
 #endif
             content.AddRange(new ITaskItem[] {
                 makeTaskItem("id",idValue),
