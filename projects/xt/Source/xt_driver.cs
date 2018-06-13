@@ -29,6 +29,7 @@ namespace NSXslTransform {
                     _xws.IndentChars = new string(' ', 4);
                     _xws.OmitXmlDeclaration = true;
                     _xws.Encoding = Encoding.ASCII;
+                    //_xws.ConformanceLevel = ConformanceLevel.Auto;
                 }
                 return _xws;
             }
@@ -86,6 +87,7 @@ namespace NSXslTransform {
 
                 if (string.IsNullOrEmpty(args.outputFile)) {
                     settings.CloseOutput = false;
+                    settings.ConformanceLevel = ConformanceLevel.Auto;
                     xw = XmlWriter.Create(Console.Out, settings);
                 } else {
                     xw = XmlWriter.Create(args.outputFile, settings);

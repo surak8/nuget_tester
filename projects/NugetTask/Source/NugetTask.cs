@@ -253,9 +253,9 @@ namespace NSNugetTask {
             pkgValue = Path.Combine(
                 Path.GetDirectoryName (fname), 
                 idValue + "." + versionValue + ".nupkg");
-
+            pkg = null;
             //Microsoft.Build.
-            var logctx=((ITask) this).BuildEngine.
+            //var logctx=((ITask) this).BuildEngine.
 #if USE_TEST_TASK_ITEM
             pkg = new TestTaskItem(pkgValue);
 #else
