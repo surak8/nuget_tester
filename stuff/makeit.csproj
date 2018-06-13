@@ -91,8 +91,8 @@
         AssemblyFile="C:\Users\Owner\source\nuget\MSBuild\NugetTask.dll"/>
 
 
-    <Target Name="AfterBuild" Inputs="$(TargetPath)">
-        <Message Text="in AfterBuild"
+    <Target Name="AfterBuild" Inputs="$(TargetPath)" Outputs="test.out">
+        <Message Text="in AfterBuild"/>
     </Target>
 
     <Target Name="dummy" Inputs="$(TargetPath)">
