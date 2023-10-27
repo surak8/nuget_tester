@@ -13,6 +13,8 @@ using NSCommon.Logging;
 // -v -x transform\DefaultPackage.xslt test.txt
 // -v -x transform\DefaultPackage.xslt test.xml -a idValue=zzz;descValue=desc;authorsValue=a;versionValue=v
 
+// -v -x SebConvert.xslt "\\appdeploy\APPDEPLOY\Colt Software\ColtMarking\ConfigFiles\LASERMARK-05\LaserRifleMarkingTasksNo2D.xml" -o test.xml
+// C:\Users\RTCOUSENS\colt\NewProjects\blah
 
 namespace NSXslTransform {
     public static class driver {
@@ -29,6 +31,11 @@ namespace NSXslTransform {
                     _xws.IndentChars = new string(' ', 4);
                     _xws.OmitXmlDeclaration = true;
                     _xws.Encoding = Encoding.ASCII;
+                    _xws.NewLineOnAttributes = true;
+                    //_xws.NewLineHandling = NewLineHandling.Replace;
+                    //_xws.NewLineHandling = NewLineHandling.Entitize;
+                    //_xws.NewLineHandling = NewLineHandling.None;
+                    //_xws.NewLineChars = "\r\n";
                     //_xws.ConformanceLevel = ConformanceLevel.Auto;
                 }
                 return _xws;
@@ -90,6 +97,8 @@ namespace NSXslTransform {
                     settings.ConformanceLevel = ConformanceLevel.Auto;
                     xw = XmlWriter.Create(Console.Out, settings);
                 } else {
+                    if (settings.ConformanceLevel==  ConformanceLevel.Document)
+                        settings.ConformanceLevel = ConformanceLevel.Auto;
                     xw = XmlWriter.Create(args.outputFile, settings);
                 }
                 if (xw != null) {
